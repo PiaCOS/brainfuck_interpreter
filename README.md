@@ -2,7 +2,8 @@
 
 ## Installation
 
-This is my Brainfuck interpreter, written in Python.
+This is my [Brainfuck](https://esolangs.org/wiki/Brainfuck) interpreter, one of the most famous esoteric programming languages, written in Python.
+
 
 To run this project, you might need to install [uv](https://github.com/astral-sh/uv) (a fast alternative to pip).
 If you don’t have it yet, install it with:
