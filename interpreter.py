@@ -1,3 +1,4 @@
+import argparse
 import re
 
 import pytest
@@ -36,9 +37,6 @@ class Brainfuck:
         inst_ptr = 0
 
         while inst_ptr < len(instruction):
-            if self.print_stack:
-                print(self.stack)
-
             match instruction[inst_ptr]:
                 case '>':
                     if data_ptr == len(stack) - 1:
@@ -52,10 +50,14 @@ class Brainfuck:
                     inst_ptr += 1
 
                 case '+':
+                    if self.print_stack:
+                        print(stack)
                     stack[data_ptr] += 1
                     inst_ptr += 1
 
                 case '-':
+                    if self.print_stack:
+                        print(stack)
                     if stack[data_ptr] > 0:
                         stack[data_ptr] -= 1
                     inst_ptr += 1
@@ -120,11 +122,20 @@ class Brainfuck:
 
 
 def main() -> None:
-    instruction = input('Enter your instruction: ')
-    bf = Brainfuck(instruction)
-    chars = bf.interpret_to_char()
-    print(bf.interpret())
-    print(chars)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', '-f', type=str, required=True)
+    parser.add_argument('--char', '-c', action=argparse.BooleanOptionalAction)
+    args = parser.parse_args()
+
+    with open(args.file, 'r') as file:
+        instruction = file.read()
+
+        bf = Brainfuck(instruction)
+
+        if args.char:
+            print(bf.interpret_to_char())
+        else:
+            print(bf.interpret())
 
 
 if __name__ == '__main__':
