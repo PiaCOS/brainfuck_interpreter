@@ -19,7 +19,7 @@ To run the Brainfuck interpreter, use:
 uv run interpreter.py -f your_program.bf
 ```
 
-If you want the output to be converted to chars with ASCII, use:
+To convert the input to text, use:
 
 ```sh
 uv run interpreter.py -c -f your_program.bf
@@ -29,6 +29,18 @@ or
 
 ```sh
 uv run interpreter.py --char --file your_program.bf
+```
+
+The instruction stack size defaults to 2**16. To adjust it, use:
+
+```sh
+uv run interpreter.py -s 128 -f your_program.bf
+```
+
+or
+
+```sh
+uv run interpreter.py --stack-size 128 --file your_program.bf
 ```
 
 ## Running Tests
