@@ -109,7 +109,9 @@ class Brainfuck:
     def _is_executable(self) -> bool:
         count_bracket = 0
         for c in self.instruction:
-            if c == '[':
+            if count_bracket < 0:
+                return False
+            elif c == '[':
                 count_bracket += 1
             elif c == ']':
                 count_bracket -= 1
@@ -188,6 +190,12 @@ def open_bracket_instruction() -> str:
     return instruction
 
 
+@pytest.fixture
+def bad_ordered_brackets_instruction() -> str:
+    instruction = '++++]>+<-[>.'
+    return instruction
+
+
 def test_remove_spaces(simple_instruction) -> None:
     bf_simple = Brainfuck(simple_instruction)
 
@@ -224,11 +232,18 @@ def test_interpret_to_char(simple_instruction, hello_world_instruction) -> None:
     assert bf_hello.interpret_to_char() == 'Hello World!\n'
 
 
-def test_is_executable(open_bracket_instruction) -> None:
+def test_is_executable(
+    open_bracket_instruction, bad_ordered_brackets_instruction
+) -> None:
     bf_open = Brainfuck(open_bracket_instruction)
+    bf_bad_ordered = Brainfuck(bad_ordered_brackets_instruction)
 
     with pytest.raises(ValueError) as e_info:
         bf_open.interpret()
+    assert e_info.value.args[0] == 'Some brackets are not closed.'
+
+    with pytest.raises(ValueError) as e_info:
+        bf_bad_ordered.interpret()
     assert e_info.value.args[0] == 'Some brackets are not closed.'
 
 
